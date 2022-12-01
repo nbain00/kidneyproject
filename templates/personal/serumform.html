@@ -1,0 +1,31 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}
+<title>Add Serum Level Log</title>
+{% endblock %}
+{% block content %}
+<div class = "container">
+        <h2><b>Log Your Serum Levels</b></h2>
+    <br>
+    <form name="form" method="post" action="{% url 'add-level' userid=pat.id%}">
+        {% csrf_token %}
+        <input type="hidden" value="{{pat.id}}" name="pat_id">
+        <label for='log_date'>Date of the log:</label>
+        <input type="date" name="log_date" id="log_date" autofocus required>
+        <br><br>
+
+        <label for= 'level'>Serum Levels:</label>
+        <input type="text" name="level" id="level" required>
+        <br><br>
+
+        <label for='serum_name'>Select Serum Type:</label> 
+        <select name='serum_name' id ="serum_name" required>
+            {% for names in serum %}
+            <option value="{{names.id}}">{{names.name}}, ({{names.units}})</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Update</button>
+    </form>
+    <a href="{% url 'log' userid=pat.id %}"><h3>Go Back to Serum Logs</h3></a>
+    <br><br><br><br><br>
+{% endblock %}
