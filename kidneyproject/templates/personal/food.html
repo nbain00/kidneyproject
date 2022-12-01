@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>Add Food</title>
+{% endblock %}
+{% block content%}
+<h2><b>Add a New Food to the Repository</b></h2>
+        <form name="form" action="{% url 'add-food' userid=pat.id %}" method="post">
+            {% csrf_token %}
+            <label for="measurement_type">Select measurement type:</label>
+            <select name="measurement_type" id="measurement_type" required>
+                <option value="grams">Per 100 grams</option>
+                <option value="mL">Per 100 mL</option>
+            </select>
+            <br>
+            <label for="name">Name of Food:</label>
+            <input id="name" type="text" name="name">
+            <br>
+            <label for="calories_kj">Calories (kJ):</label>
+            <input id="calories_kj" type="number" name="calories_kj" required>
+            <br>
+            <label for="water_g">Water (g):</label>
+            <input id="water_g" type="number" name="water_g" required>
+            <br>
+            <label for="protein_g">Protein (g):</label>
+            <input id="protein_g" type="number" name="protein_g" required>
+            <br>
+            <label for="total_fat_g">Total Fat (g):</label>
+            <input id="total_fat_g" type="number" name="total_fat_g" required>
+            <br>
+            <label for="total_fiber_g">Total Fiber (g):</label>
+            <input id="total_fiber_g" type="number" name="total_fiber_g" required>
+            <br>
+            <label for="alcohol_g">Alcohol (g):</label>
+            <input id="alcohol_g" type="number" name="alcohol_g" required>
+            <br>
+            <label for="total_sugars_g">Total Sugars (g):</label>
+            <input id="total_sugars_g" type="number" name="total_sugars_g" required>
+            <br>
+            <label for="added_sugars_g">Added Sugars (g):</label>
+            <input id="added_sugars_g" type="number" name="added_sugars_g" required>
+            <br>
+            <label for="total_carbs_g">Total Carbs (g):</label>
+            <input id="total_carbs_g" type="number" name="total_carbs_g" required>
+            <br>
+            <label for="ca_mg">Calcium (mg):</label>
+            <input id="ca_mg" type="number" name="ca_mg" required>
+            <br>
+            <label for="phos_mg">Phosphorous (mg):</label>
+            <input id="phos_mg" type="number" name="phos_mg" required>
+            <br>
+            <label for="k_mg">Potassium (mg):</label>
+            <input id="k_mg" type="number" name="k_mg" required>
+            <br>
+            <label for="na_mg">Sodium (mg):</label>
+            <input id="na_mg" type="number" name="na_mg" required>
+            <br>
+            <label for="total_saturated_fat_g">Total Saturated Fat (g):</label>
+            <input id="total_saturated_fat_g" type="number" name="total_saturated_fat_g" required>
+            <br>
+            <label for="total_unsaturated_fat_g">Total Unsaturated Fat (g):</label>
+            <input id="total_unsaturated_fat_g" type="number" name="total_unsaturated_fat_g" required>
+            <br>
+            <input type="submit" value="Save">
+        </form>     
+        <a href="{% url 'journal' userid=pat.id date1='today' %}"><h3>Go back to My Journal</h3></a>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>Serum Levels</title>
+{% endblock %}
+{% block content%}
+<h2><b>Serum Levels</b></h2>
+<br>
+<style>
+    .both {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+</style>
+<a class = "btn btn-primary" href="{% url 'add-level' userid=pat.id%}">Create New Log Entry</a>
+<div class="both">
+<br>
+<br><br>
+<div style="flex-grow: 2">
+<canvas id="line-chart" width="800" height="450"></canvas>
+</div>
+<div style='border-style: solid; border-color: black; flex-grow: 1'>
+    <br>
+    <h4>Target Serum Levels for {{pat.first_name|capfirst}} :</h4>
+    <p>K: 3.6-5.2 &#40;mg/dL&#41;</p>
+    <p>Phos: 2.8-4.5 &#40;mg/dL&#41;</p>
+    <p>Na: 135-145 &#40;mEq/L&#41;</p>
+    <p>Creatinine: {{RDA_creatinine}} &#40;mEq/L&#41;</p>
+    <p> Albumin: 3.5 &#40;g/dL&#41;</p>
+    <p>Blood Sugar: 70-100 &#40;mg/dL&#41;</p>
+</div>
+</div>
+<div class="container">
+    {% for log in levels %}
+    <p>
+        {{ log.log_date }} - {{ log.name }}: {{ log.level }}
+        <a class="btn btn-primary" href="{% url 'deleteLog' userid=pat.id logid=log.id %}">Delete</a>
+    </p>
+    {% endfor %}
+</div>
+<div>
+
+<script>
+    new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+            labels: [{% for data in dates %} '{{data.log_date}}', {%endfor%}],
+            datasets: [ {% for data in serum_types %}
+            {
+                data: [{% for data1 in levels %} {% if data1.name == data.name %} {{data1.level}}, {% endif %} {% endfor %}],
+                label: '{{data.name}}'
+        
+            }, {% endfor %}]            
+        },
+        options: {
+            title: {
+            display: true,
+            text: 'World population per region (in millions)'
+            },
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'month'
+                }
+            }
+        }
+        });
+</script>
+</div>
+{% endblock %}

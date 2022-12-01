@@ -1,0 +1,366 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>Food Journal</title>
+{% endblock %}
+{% block content%}
+<style>
+    .graphs {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+    }
+    .items {
+        display: inline-flex;
+        height: 20vh;
+        width:15vw;
+    }
+</style>
+<h2><b>My Daily Food Journal</b></h2>
+<br>
+<form name="form" action="{% url 'journal' userid=pat.id date1='other' %}" method="post">
+    {% csrf_token %}
+    <label for="sDate">Select Date</label>
+    <input type="date" name="sDate" id="sDate" value="{{showDate}}">
+    <input type="submit" value="Show Meals on this Date">
+</form>
+<div class="graphs2">
+<div class = "col-md-4 items" >
+    <canvas id="myChart" ></canvas>
+        <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['water', 'water to go'],
+                datasets: [{
+                    label: 'amount',
+                    data: [{{chart_water}}, {{chart_waterNOT}}],
+                    backgroundColor: [                                       
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(25, 80, 115, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    subtitle: {
+                        display: true,
+                        text: {% if chart_water > 100 %}"You've exceed your water limit for the day!"{% else %}""{% endif %},
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: "Daily Target: " + {{RDA_water}} + " mL"
+                    }
+                }                     
+            }
+        });
+        </script>
+</div>
+<div class = "col-md-4 items" >
+    <canvas id="myChart4" ></canvas>
+    <script>
+    const ctx4 = document.getElementById('myChart4').getContext('2d');
+    const myChart4 = new Chart(ctx4, {
+        type: 'doughnut',
+        data: {
+            labels: ['protein', 'protein to go'],
+            datasets: [{
+                label: 'amount',
+                data: [{{chart_protein}}, {{chart_proteinNOT}}],
+                backgroundColor: [
+                    'rgba(211, 167, 55, 0.8)',
+                    'rgba(105, 83, 27, 0.8)',
+
+                ],
+                borderColor: [
+                    'rgba(211, 167, 55, 1)',
+                    'rgba(211, 167, 55, 1)',
+
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                subtitle: {
+                    display: true,
+                    text: {% if chart_protein > 100 %}"You've exceed your protein limit for the day!"{% else %}""{% endif %},
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: "Daily Target: " + Math.round({{RDA_protein}},2) + " grams"
+                } 
+            }                     
+        }
+    });
+    </script>
+</div>
+<div class = "col-md-4 items" >
+    <canvas id="myChart2" ></canvas>
+        <script>
+        const ctx2 = document.getElementById('myChart2').getContext('2d');
+        const myChart2 = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['sodium', 'sodium to go'],
+                datasets: [{
+                    label: 'amount',
+                    data: [{{chart_na}}, {{chart_naNOT}}],
+                    backgroundColor: [
+                        'rgba(211, 69, 55, 0.8)',
+                        'rgba(105, 35, 27, 0.6)',
+                    ],
+                    borderColor: [
+                        'rgba(211, 69, 55, 1)',
+                        'rgba(211, 69, 55, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    subtitle: {
+                        display: true,
+                        text: {% if chart_na > 100 %}"You've exceed your sodium limit for the day!"{% else %}""{% endif %},
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: "Daily Target: " + {{RDA_na}} + " mg"
+                    }
+                }                     
+            }
+        });
+        </script>
+</div>
+<div class = "col-md-4 items" >
+    <canvas id="myChart6" ></canvas>
+    <script>
+    const ctx6 = document.getElementById('myChart6').getContext('2d');
+    const myChart6 = new Chart(ctx6, {
+        type: 'doughnut',
+        data: {
+            labels: ['carbohydrates', 'carbs to go'],
+            datasets: [{
+                label: 'amount',
+                data: [{{chart_carbs}}, {{chart_carbsNOT}}],
+                backgroundColor: [
+                    'rgba(151, 55, 211, 0.8)',
+                    'rgba(75, 26, 100, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(151, 55, 211, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                subtitle: {
+                    display: true,
+                    text: {% if chart_carbs > 100 %}  "You've exceed your carb limit for the day!"{% else %}""{% endif %},
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: "Daily Target: " + {{RDA_carbs}} + " grams",
+                }
+            }
+        }
+    });
+    </script>
+</div>
+<div class = "col-md-4 items" >
+    <canvas id="myChart5" ></canvas>
+    <script>
+    const ctx5 = document.getElementById('myChart5').getContext('2d');
+    const myChart5 = new Chart(ctx5, {
+        type: 'doughnut',
+        data: {
+            labels: ['potassium (k)', 'potassium (k) to go'],
+            datasets: [{
+                label: 'amount',
+                data: [{{chart_k}}, {{chart_kNOT}}],
+                backgroundColor: [
+                    'rgba(78, 219, 68, 0.8)',
+                    'rgba(34, 105, 34, 0.8)',
+
+                ],
+                borderColor: [
+                    'rgba(78, 219, 68, 1)',
+                    'rgba(78, 219, 68, 1)',
+
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                subtitle: {
+                    display: true,
+                    text: {% if chart_k > 100 %}"You've exceed your potassium limit for the day!"{% else %}""{% endif %},
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: "Daily Target: " + Math.round({{RDA_k}},2) + " mg"
+                } 
+            }                     
+        }
+    });
+    </script>
+</div>
+<div class = "col-md-4 items" >
+    <canvas id="myChart7" ></canvas>
+    <script>
+    const ctx7 = document.getElementById('myChart7').getContext('2d');
+    const myChart7 = new Chart(ctx7, {
+        type: 'doughnut',
+        data: {
+            labels: ['phosphorous', 'phosphorous to go'],
+            datasets: [{
+                label: 'amount',
+                data: [{{chart_phos}}, {{chart_phosNOT}}],
+                backgroundColor: [
+                    'rgba(255, 42, 242, 0.8)',
+                    'rgba(123, 21, 121, 0.8)',
+
+                ],
+                borderColor: [
+                    'rgba(255, 42, 242, 1)',
+                    'rgba(255, 42, 242, 1)',
+
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                subtitle: {
+                    display: true,
+                    text: {% if chart_phos > 100 %}"You've exceed your phosphorous limit for the day!"{% else %}""{% endif %},
+                    position: 'bottom'
+                },
+                title: {
+                    display: true,
+                    text: "Daily Target: " + Math.round({{RDA_phos}},5) + " mg"
+                } 
+            }                     
+        }
+    });
+    </script>
+</div>
+</div>
+<style>
+    .meal-header {
+        display: flex;
+        justify-content: center;
+    }
+    table, th, td {
+        border: 3px solid darkgray;
+        border-collapse: collapse;
+        padding: 5px;
+    }
+    .meal-table {
+        display: flex;
+        justify-content: center;
+        text-align: left;
+    }
+</style>
+<div class="container">
+    <div class="meal-header">
+        <h3 style="margin-right:10px">Breakfast</h3><a class = "btn btn-primary" href="{% url 'food-in-meal' userid=pat.id mealtype='breakfast' logid=0 date1=showDate%}">Add food</a>
+    </div>
+    <br>
+    <div class="meal-table">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Amount {% if pat.unit_preference == 'us' %}(oz){% else %}(g){% endif %}</th>
+            </thead>
+            <tbody>
+                {% for food in breakfast %}
+                <tr>                    
+                    <td>{{food}}</td>
+                    <td>{{food.amount}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br> 
+    <div class="meal-header">
+        <h3 style="margin-right:10px">Lunch</h3><a class = "btn btn-primary" href="{% url 'food-in-meal' userid=pat.id mealtype='lunch' logid=0 date1=showDate%}">Add food</a>
+    </div>
+    <br>
+    <div class="meal-table">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Amount {% if pat.unit_preference == 'us' %}(oz){% else %}(g){% endif %}</th>
+            </thead>
+            <tbody>
+                {% for food in lunch %}
+                <tr>                    
+                    <td>{{food}}</td>
+                    <td>{{food.amount}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="meal-header">
+        <h3 style="margin-right:10px">Dinner</h3><a class = "btn btn-primary" href="{% url 'food-in-meal' userid=pat.id mealtype='dinner' logid=0 date1=showDate%}">Add food</a>
+    </div>
+    <br>
+    <div class="meal-table">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Amount {% if pat.unit_preference == 'us' %}(oz){% else %}(g){% endif %}</th>
+            </thead>
+            <tbody>
+                {% for food in dinner %}
+                <tr>                    
+                    <td>{{food}}</td>
+                    <td>{{food.amount}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="meal-header">
+        <h3 style="margin-right:10px">Snacks</h3><a class = "btn btn-primary" href="{% url 'food-in-meal' userid=pat.id mealtype='snacks' logid=0 date1=showDate%}">Add food</a>
+    </div>
+    <br>
+    <div class="meal-table">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Amount {% if pat.unit_preference == 'us' %}(oz){% else %}(g){% endif %}</th>
+            </thead>
+            <tbody>
+                {% for food in snacks %}
+                <tr>                    
+                    <td>{{food}}</td>
+                    <td>{{food.amount}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+  
+{% endblock %}
