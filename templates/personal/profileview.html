@@ -46,16 +46,16 @@
             <br><br>
 
             <label for='kidney_stage'>Kidney Stage:</label> 
-            <select name='kidney_stage' id ="kidney_stage">
+            <select name='kidney_stage' id ="kidney_stage" required>
                 {% for names in stage %}
-                <option value="{{names.id}}">{{names.name}}</option>
+                <option value="{{names.id}}" {% if profile.kidney_stage == {{names.id}} %}selected{% endif %}>{{names.name}}</option>
                 {% endfor %}
             </select>
             <br><br>
             
             <label for='comorbidity' style="display:block;
             padding:2px;">Comorbidity &#40;if any&#41;:</label> 
-            <select name='comorbidity' id ="comorbidity" multiple>
+            <select name='comorbidity' id ="comorbidity" multiple required>
 
                 {% for names in comor %}
                 <option value="{{names.id}}" {% if profile.comorbidity == '{{names.id}}'%}selected{% endif %}>{{names.name}}</option>
