@@ -1,3 +1,9 @@
+# Nathan Bain
+# Matt Curzon
+# Yonghee Lee
+# Bruyn Decker
+
+# INTEX Fall 2022
 """
 Django settings for kidneyproject project.
 
